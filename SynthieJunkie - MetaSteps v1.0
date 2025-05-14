@@ -1,0 +1,468 @@
+//  __  __          _              _____   _                        
+// |  \/  |        | |            / ____| | |                       
+// | \  / |   ___  | |_    __ _  | (___   | |_    ___   _ __    ___ 
+// | |\/| |  / _ \ | __|  / _` |  \___ \  | __|  / _ \ | '_ \  / __|
+// | |  | | |  __/ | |_  | (_| |  ____) | | |_  |  __/ | |_) | \__ \
+// |_|  |_|  \___|  \__|  \__,_| |_____/   \__|  \___| | .__/  |___/
+//                                                     | |          
+//                                                     |_|          
+
+
+// Reaper JSFX: MetaSteps
+// (c) 2025 by SynthieJunkie
+// MIT License
+
+desc:SynthieJunkie - MetaSteps v1.0
+desc:MetaSteps v1.0
+
+
+
+options:no_meter
+
+
+
+slider1:SliderClock=2<0,4,1>Clock
+slider2:SliderReset=16<1,16,1>Reset
+
+slider4:SliderPatternShift=0<-16,16,1>Pattern Shift
+slider5:SliderPatternChance=0<0,127,1>Pattern Chance
+slider6:SliderPatternPitch=0<0,127,1>Pattern Pitch
+slider7:SliderPatternVelocity=0<0,127,1>Pattern Velocity
+slider8:SliderPatternAll=0<0,127,1>Pattern All
+
+slider10:SliderChance=100<0,100,1>Chance
+
+slider12:SliderPitchScale=0<0,10,1{Full,Major,Minor,MajorPentatonic,MinorPentatonic,Major7th,Minor7th,Major135,Minor135,Quint,Octave}>Pitch Scale
+slider13:SliderPitchMin=0<0,127,1>Pitch Min
+slider14:SliderPitchMax=127<0,127,1>Pitch Max
+slider15:SliderPitchShift=0<-60,60,1>Pitch Shift
+slider16:SliderPitchTranspose=0<-24,24,1}>Pitch Transpose
+
+slider18:SliderVelocityMin=0<0,127,1>Velocity Min
+slider19:SliderVelocityMax=127<0,127,1>Velocity Max
+slider20:SliderVelocityShift=0<-60,60,1>Velocity Shift
+
+slider22:SliderLegato=0<0,1,1{Off,On}>Legato
+
+
+
+@init
+function AllNotesOff()
+(
+  Pitch = 0;
+  loop (128,
+    midisend(0, 0x80, Pitch, 0);
+    Pitch += 1;
+  );
+);
+function Scale_Major(Note)
+(
+  Pitch = Note % 12;
+  Octave = (Note / 12) | 0;
+
+  Out = Note;
+  Pitch == 0 ? Out = 0;
+  Pitch == 1 ? Out = 0;
+  Pitch == 2 ? Out = 2;
+  Pitch == 3 ? Out = 2;
+  Pitch == 4 ? Out = 4;
+  Pitch == 5 ? Out = 5;
+  Pitch == 6 ? Out = 5;
+  Pitch == 7 ? Out = 7;
+  Pitch == 8 ? Out = 7;
+  Pitch == 9 ? Out = 9;
+  Pitch == 10 ? Out = 9;
+  Pitch == 11 ? Out = 11;
+
+  Out + Octave * 12;
+);
+function Scale_Minor(Note)
+(
+  Pitch = Note % 12;
+  Octave = (Note / 12) | 0;
+
+  Out = Note;
+  Pitch == 0 ? Out = 0;
+  Pitch == 1 ? Out = 0;
+  Pitch == 2 ? Out = 2;
+  Pitch == 3 ? Out = 3;
+  Pitch == 4 ? Out = 3;
+  Pitch == 5 ? Out = 5;
+  Pitch == 6 ? Out = 5;
+  Pitch == 7 ? Out = 7;
+  Pitch == 8 ? Out = 8;
+  Pitch == 9 ? Out = 8;
+  Pitch == 10 ? Out = 10;
+  Pitch == 11 ? Out = 10;
+
+  Out + Octave * 12;
+);
+function Scale_Major_Pentatonic(Note)
+(
+  Pitch = Note % 12;
+  Octave = (Note / 12) | 0;
+
+  Out = Note;
+  Pitch == 0 ? Out = 0;
+  Pitch == 1 ? Out = 0;
+  Pitch == 2 ? Out = 2;
+  Pitch == 3 ? Out = 2;
+  Pitch == 4 ? Out = 4;
+  Pitch == 5 ? Out = 4;
+  Pitch == 6 ? Out = 4;
+  Pitch == 7 ? Out = 7;
+  Pitch == 8 ? Out = 7;
+  Pitch == 9 ? Out = 9;
+  Pitch == 10 ? Out = 9;
+  Pitch == 11 ? Out = 9;
+
+  Out + Octave * 12;
+);
+function Scale_Minor_Pentatonic(Note)
+(
+  Pitch = Note % 12;
+  Octave = (Note / 12) | 0;
+
+  Out = Note;
+  Pitch == 0 ? Out = 0;
+  Pitch == 1 ? Out = 0;
+  Pitch == 2 ? Out = 0;
+  Pitch == 3 ? Out = 3;
+  Pitch == 4 ? Out = 3;
+  Pitch == 5 ? Out = 5;
+  Pitch == 6 ? Out = 5;
+  Pitch == 7 ? Out = 7;
+  Pitch == 8 ? Out = 7;
+  Pitch == 9 ? Out = 7;
+  Pitch == 10 ? Out = 10;
+  Pitch == 11 ? Out = 10;
+
+  Out + Octave * 12;
+);
+function Scale_Major_7th(Note)
+(
+  Pitch = Note % 12;
+  Octave = (Note / 12) | 0;
+
+  Out = Note;
+  Pitch == 0 ? Out = 0;
+  Pitch == 1 ? Out = 0;
+  Pitch == 2 ? Out = 0;
+  Pitch == 3 ? Out = 0;
+  Pitch == 4 ? Out = 4;
+  Pitch == 5 ? Out = 4;
+  Pitch == 6 ? Out = 4;
+  Pitch == 7 ? Out = 7;
+  Pitch == 8 ? Out = 7;
+  Pitch == 9 ? Out = 7;
+  Pitch == 10 ? Out = 7;
+  Pitch == 11 ? Out = 11;
+
+  Out + Octave * 12;
+);
+function Scale_Minor_7th(Note)
+(
+  Pitch = Note % 12;
+  Octave = (Note / 12) | 0;
+
+  Out = Note;
+  Pitch == 0 ? Out = 0;
+  Pitch == 1 ? Out = 0;
+  Pitch == 2 ? Out = 0;
+  Pitch == 3 ? Out = 3;
+  Pitch == 4 ? Out = 3;
+  Pitch == 5 ? Out = 3;
+  Pitch == 6 ? Out = 3;
+  Pitch == 7 ? Out = 7;
+  Pitch == 8 ? Out = 7;
+  Pitch == 9 ? Out = 7;
+  Pitch == 10 ? Out = 10;
+  Pitch == 11 ? Out = 10;
+
+  Out + Octave * 12;
+);
+function Scale_Major_135(Note)
+(
+  Pitch = Note % 12;
+  Octave = (Note / 12) | 0;
+
+  Out = Note;
+  Pitch == 0 ? Out = 0;
+  Pitch == 1 ? Out = 0;
+  Pitch == 2 ? Out = 0;
+  Pitch == 3 ? Out = 0;
+  Pitch == 4 ? Out = 4;
+  Pitch == 5 ? Out = 4;
+  Pitch == 6 ? Out = 4;
+  Pitch == 7 ? Out = 7;
+  Pitch == 8 ? Out = 7;
+  Pitch == 9 ? Out = 7;
+  Pitch == 10 ? Out = 7;
+  Pitch == 11 ? Out = 7;
+
+  Out + Octave * 12;
+);
+function Scale_Minor_135(Note)
+(
+  Pitch = Note % 12;
+  Octave = (Note / 12) | 0;
+
+  Out = Note;
+  Pitch == 0 ? Out = 0;
+  Pitch == 1 ? Out = 0;
+  Pitch == 2 ? Out = 0;
+  Pitch == 3 ? Out = 3;
+  Pitch == 4 ? Out = 3;
+  Pitch == 5 ? Out = 3;
+  Pitch == 6 ? Out = 3;
+  Pitch == 7 ? Out = 7;
+  Pitch == 8 ? Out = 7;
+  Pitch == 9 ? Out = 7;
+  Pitch == 10 ? Out = 7;
+  Pitch == 11 ? Out = 7;
+
+  Out + Octave * 12;
+);
+function Scale_Quint(Note)
+(
+  Pitch = Note % 12;
+  Octave = (Note / 12) | 0;
+
+  Out = Note;
+  Pitch == 0 ? Out = 0;
+  Pitch == 1 ? Out = 0;
+  Pitch == 2 ? Out = 0;
+  Pitch == 3 ? Out = 0;
+  Pitch == 4 ? Out = 0;
+  Pitch == 5 ? Out = 0;
+  Pitch == 6 ? Out = 0;
+  Pitch == 7 ? Out = 7;
+  Pitch == 8 ? Out = 7;
+  Pitch == 9 ? Out = 7;
+  Pitch == 10 ? Out = 7;
+  Pitch == 11 ? Out = 7;
+
+  Out + Octave * 12;
+);
+function Scale_Octave(Note)
+(
+  ((Note / 12) | 0) * 12;
+);
+function Random(S)
+(
+  R1 = S * 40014 + 1;
+  R2 = S * 48271 + 3;
+  R3 = S * 16807 + 5;
+  R4 = S * 40692 + 11;
+  R5 = S * 69621 + 17;
+  R6 = S * 2531011 + 19;
+  R7 = S * 65539 + 23;
+  R8 = S * 214013 + 37;
+  R9 = S * 134775813 + 41;
+  S = abs(R1 - R2) ~ abs(R3 * R4) | abs(R5 - R6) ~ abs(R7 * R8) | R9;
+  S %= 2147483647;
+);
+function UpdateMemory()
+(
+  Index = 0;
+  loop (Memory_Count,
+    Offset = Index * Memory_Size;
+    Index += 1;
+
+    PatternChance = Random(PatternChance + SliderPatternAll * 128);
+    PatternPitch = Random(PatternPitch + SliderPatternAll * 128);
+    PatternVelocity = Random(PatternVelocity + SliderPatternAll * 128);
+ 
+    RandomChance = (PatternChance % 256) / 256.0;
+    RandomPitch = (PatternPitch % 256) / 256.0;
+    RandomVelocity = (PatternVelocity % 256) / 256.0;
+
+    Chance = RandomChance * 99;
+    Pitch = (SliderPitchMax - SliderPitchMin + 1) * RandomPitch + SliderPitchMin + SliderPitchShift;
+    Velocity = (SliderVelocityMax - SliderVelocityMin + 1) * RandomVelocity + SliderVelocityMin + SliderVelocityShift;
+
+    Chance = Chance | 0;
+    Pitch = Pitch | 0;
+    Velocity = Velocity | 0;
+
+    SliderPitchScale == 1 ? Pitch = Scale_Major(Pitch);
+    SliderPitchScale == 2 ? Pitch = Scale_Minor(Pitch);
+    SliderPitchScale == 3 ? Pitch = Scale_Major_Pentatonic(Pitch);
+    SliderPitchScale == 4 ? Pitch = Scale_Minor_Pentatonic(Pitch);
+    SliderPitchScale == 5 ? Pitch = Scale_Major_7th(Pitch);
+    SliderPitchScale == 6 ? Pitch = Scale_Minor_7th(Pitch);
+    SliderPitchScale == 7 ? Pitch = Scale_Major_135(Pitch);
+    SliderPitchScale == 8 ? Pitch = Scale_Minor_135(Pitch);
+    SliderPitchScale == 9 ? Pitch = Scale_Quint(Pitch);
+    SliderPitchScale == 10 ? Pitch = Scale_Octave(Pitch);
+
+    Pitch += SliderPitchTranspose;
+    Pitch = min(max(Pitch, 0), 127);
+
+    Velocity = min(max(Velocity, 0), 127);
+
+    Memory[Offset + Offset_Chance] = Chance;
+    Memory[Offset + Offset_Pitch] = Pitch;
+    Memory[Offset + Offset_Velocity] = Velocity;
+  );
+);
+
+
+
+Memory_Count = 16;
+Memory_Size = 3;
+Memory[Memory_Count * Memory_Size] = 0;
+
+Offset_Chance = 0;
+Offset_Pitch = 1;
+Offset_Velocity = 2;
+
+AllNotesOff();
+
+LastBeat = 0;
+CurrentBeat = -1;
+LastPitch = -1;
+
+PatternChance = SliderPatternChance;
+PatternPitch = SliderPatternPitch;
+PatternVelocity = SliderPatternVelocity;
+PatternShift = SliderPatternShift;
+PatternShift < 0 ? PatternShift = Memory_Count - abs(PatternShift);
+
+UpdateMemory();
+
+
+
+@slider
+PatternChance = SliderPatternChance;
+PatternPitch = SliderPatternPitch;
+PatternVelocity = SliderPatternVelocity;
+PatternShift = SliderPatternShift;
+PatternShift < 0 ? PatternShift = Memory_Count - abs(PatternShift);
+
+UpdateMemory();
+
+
+
+@block
+while (midirecv(offset, msg1, msg2, msg3))
+(
+  midisend(offset, msg1, msg2, msg3);
+);
+
+
+
+@sample
+LastState = CurrentState;
+CurrentState = play_state;
+
+CurrentState != LastState && CurrentState == 0 ? AllNotesOff();
+
+CurrentState == 1 || CurrentState == 5 ?
+(
+  LastBeat = CurrentBeat;
+  CurrentBeat = (beat_position * pow(2, SliderClock)) | 0;
+  CurrentBeat %= SliderReset;
+
+  CurrentBeat != LastBeat ?
+  (
+    SliderLegato == 0 ? midisend(0, 0x80, LastPitch, 0);
+
+    Offset = (CurrentBeat % Memory_Count) * Memory_Size;
+    Offset += (Memory_Count - PatternShift) * Memory_Size;
+    Offset %= Memory_Count * Memory_Size;
+
+    Chance = Memory[Offset + Offset_Chance];
+    Chance < SliderChance ?
+    (
+      Pitch = Memory[Offset + Offset_Pitch];
+      Velocity = Memory[Offset + Offset_Velocity];
+
+      Velocity > 0 ?
+      (
+        SliderLegato == 1 ? ( midisend(0, 0x80, LastPitch, 0); );
+
+        midisend(0, 0x90, Pitch, Velocity);
+        LastPitch = Pitch;
+      );
+    );
+  );
+);
+
+
+
+@gfx 0 279
+gfx_clear = 0;
+
+Width = 38;
+Height = 5;
+
+//Horizontale Linien (Mitte, Unten)
+gfx_set(0.3, 0.3, 0.3);
+gfx_line(0, 0 + 128 + Height, Width * 16 - 1, 128 + Height);
+gfx_line(0, 0 + 256 + Height * 2, Width * 16 - 1, 256 + Height * 2);
+
+//Horizontale Linien (Pitch)
+gfx_set(0.15, 0.15, 0.15);
+Y = 1;
+loop(10,
+  gfx_line(0, Y * 12, Width * 16 - 1, Y * 12);
+  Y += 1;
+);
+
+//Vertikale Linien (Beats)
+gfx_set(0.3, 0.3, 0.3);
+gfx_line(Width * 4 - 1, 0, Width * 4 - 1, 256 + Height * 2);
+gfx_line(Width * 8 - 1, 0, Width * 8 - 1, 256 + Height * 2);
+gfx_line(Width * 12 - 1, 0, Width * 12 - 1, 256 + Height * 2);
+gfx_line(Width * 16 - 1, 0, Width * 16 - 1, 256 + Height * 2);
+
+//Cursor
+CurrentState == 1 || CurrentState == 5 ?
+(
+  gfx_set(0.1, 0.3, 0.5, 0.5);
+  Index = CurrentBeat % Memory_Count;
+  gfx_rect(Index * Width, 0, Width - 1, 256 + Height * 2);
+);
+
+//Pitch, Velocity
+MedianPitch = 0;
+MedianVelocity = 0;
+
+Index = 0;
+loop(Memory_Count,
+  Offset = Index * Memory_Size;
+  Offset += (Memory_Count - PatternShift) * Memory_Size;
+  Offset %= (Memory_Count * Memory_Size);
+
+  Chance = Memory[Offset + Offset_Chance];
+  Pitch = Memory[Offset + Offset_Pitch];
+  Velocity = Memory[Offset + Offset_Velocity];
+
+  MedianPitch += Pitch;
+  MedianVelocity += Velocity;
+
+  gfx_set(0.5, 0.5, 0.5, 0.5);
+  Chance < SliderChance ? gfx_set(0, 1, 0, 0.5);
+  Index >= SliderReset ? gfx_set(0.5, 0.2, 0.2, 0.5);
+  gfx_rect(Index * Width, 128 - Pitch, Width - 1, Height);
+
+  gfx_set(0.5, 0.5, 0.5, 0.5);
+  Chance < SliderChance ? gfx_set(0, 1, 0, 0.5);
+  Index >= SliderReset ? gfx_set(0.5, 0.2, 0.2, 0.5);
+  gfx_rect(Index * Width, 128 + (128 - Velocity) + Height, Width - 1, Velocity + Height);
+
+  Index += 1;
+);
+
+//Medians
+MedianPitch /= Memory_Count;
+MedianPitch = 128 - MedianPitch;
+
+MedianVelocity /= Memory_Count;
+MedianVelocity = 128 - MedianVelocity;
+
+gfx_set(0.5, 0.3, 0.1, 0.5);
+gfx_rect(0, MedianPitch, Width * 16 - 1, Height);
+gfx_rect(0, 128 + Height + MedianVelocity, Width * 16 - 1, Height);
+
